@@ -1,88 +1,65 @@
 import 'package:flutter/material.dart';
-import 'classes.dart';
-import 'size_config.dart';
-import 'drawer.dart';
-import 'floatingbutton.dart';
 
-class homeScreen extends StatefulWidget {
-  final String title;
-  homeScreen(this.title);
+import './appBarCustom.dart';
+import './body_time.dart';
+import './bottom_bar.dart';
+import './body_class.dart';
+
+class MyHomeScreen extends StatefulWidget {
   @override
-  _homeScreenState createState() => new _homeScreenState();
+  _MyHomeScreenState createState() => _MyHomeScreenState();
 }
 
-class _homeScreenState extends State<homeScreen> {
-  bool theme = false;
-  BoxDecoration myBoxDecoration() {
-    return BoxDecoration(
-        border: Border.all(color: Colors.blue.shade700, width: 2.0),
-        color: Colors.black,
-        borderRadius: BorderRadius.all(Radius.circular(20.0)));
-  }
+class _MyHomeScreenState extends State<MyHomeScreen> {
+  final DateTime date = DateTime.now();
 
-  _drawers() {
-    return Drawer(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Hi'),
-          toolbarHeight: SizeConfig.blockSizeVertical * 10,
+  add() {
+    setState(() {
+      return Container(
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.lightBlue),
+            borderRadius: BorderRadius.circular(10)),
+        child: Center(
+          child: Text(
+            'helo',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
-        body: ListView(
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.nightlight_round),
-              title: Text('Night Mode'),
-              trailing: Switch(
-                value: theme,
-                onChanged: (changedTheme) {
-                  setState(() {
-                    theme = changedTheme;
-                  });
-                },
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    var height = SizeConfig.blockSizeVertical * 18;
-    var width = SizeConfig.blockSizeHorizontal * 90;
-    // print(height);
-    // print(width);
-    return MaterialApp(
-        theme: theme ? ThemeData.dark() : ThemeData.light(),
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text('Test_1'),
-            toolbarHeight: SizeConfig.blockSizeVertical * 8,
-            backgroundColor: Colors.blue.shade800,
-          ),
-          // bottomNavigationBar: BottomAppBar(
-          //     shape: CircularNotchedRectangle(),
-          //     color: Colors.blue.shade700,
-          //     child: Container(
-          //       height: 50.0,
-          //     )),
-          floatingActionButton: MyFloatingButtonAction(
-            icon: Icons.add,
-          ),
-          // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          body: Align(
-            alignment: Alignment(0, -0.90),
-            // decoration: myBoxDecoration(),
-            child: InkWell(
-              // width: 313.0,
-              // height: 95.0,
-              child: ClassRoom(height, width),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavBar(),
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                colors: [Colors.white, Colors.lightBlue[200]])),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(10, 20, 0, 20),
+              child: AppBarCustom(),
             ),
-          ),
-          // drawer: Drawers(theme),
-          drawer: _drawers(),
-        ));
+            Container(
+              child: HomeBodyTime(),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+              child: Container(
+                child: BodyClass(),
+                height: ((MediaQuery.of(context).size.height / 100) * 60.7),
+              ),
+            ),
+            // BottomNavBar(),
+          ],
+        ),
+      ),
+    );
   }
 }
